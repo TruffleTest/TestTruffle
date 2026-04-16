@@ -6,7 +6,12 @@ on:
 
 jobs:
   security-scan:
+    name: security-scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,14 +19,14 @@ jobs:
           fetch-depth: 0
       
       - name: Semgrep Security Scan
-        uses: returntocorp/semgrep-action@v1
+        uses: semgrep/semgrep-action@v1
         with:
           config: >-
             p/security-audit
             p/owasp-top-ten
       
       - name: TruffleHog Secrets Scan
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@v3.82.0
         with:
           path: ./
           base: ${{ github.event.pull_request.base.sha }}
@@ -29,7 +34,7 @@ jobs:
           extra_args: --only-verified
       
       - name: Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: 'fs'
           scan-ref: '.'

@@ -18,12 +18,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Semgrep
-        run: pip install semgrep
-
-      - name: Semgrep Security Scan
-        run: semgrep scan --config auto --error .
-
       - name: TruffleHog Secrets Scan
         uses: trufflesecurity/trufflehog@v3.82.0
         with:
@@ -31,3 +25,10 @@ jobs:
           base: ${{ github.event.pull_request.base.sha }}
           head: ${{ github.event.pull_request.head.sha }}
           extra_args: --results=verified,unverified
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Semgrep Security Scan
+        run: semgrep scan --config auto --error .
+

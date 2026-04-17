@@ -22,7 +22,7 @@ jobs:
         run: pip install semgrep
 
       - name: Semgrep Security Scan
-        run: semgrep scan --config p/security-audit --config p/owasp-top-ten --error .
+        run: semgrep scan --config auto --error .
 
       - name: TruffleHog Secrets Scan
         uses: trufflesecurity/trufflehog@v3.82.0

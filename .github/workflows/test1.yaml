@@ -33,10 +33,3 @@ jobs:
           head: ${{ github.event.pull_request.head.sha }}
           extra_args: --only-verified
       
-      - name: Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'

@@ -11,21 +11,19 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-    
-    container:
-      image: semgrep/semgrep
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
       - name: Semgrep Security Scan
         run: semgrep scan --config p/security-audit --config p/owasp-top-ten --error .
-        env:
-          SEMGREP_RULES: p/security-audit p/owasp-top-ten
-      
+
       - name: TruffleHog Secrets Scan
         uses: trufflesecurity/trufflehog@v3.82.0
         with:

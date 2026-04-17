@@ -1,4 +1,4 @@
-name: Test 1
+name: Security Gate
 
 on:
   pull_request:
@@ -12,6 +12,9 @@ jobs:
       contents: read
       pull-requests: read
     
+    container:
+      image: semgrep/semgrep
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,11 +22,9 @@ jobs:
           fetch-depth: 0
       
       - name: Semgrep Security Scan
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/security-audit
-            p/owasp-top-ten
+        run: semgrep scan --config p/security-audit --config p/owasp-top-ten --error .
+        env:
+          SEMGREP_RULES: p/security-audit p/owasp-top-ten
       
       - name: TruffleHog Secrets Scan
         uses: trufflesecurity/trufflehog@v3.82.0
@@ -31,4 +32,3 @@ jobs:
           path: ./
           base: ${{ github.event.pull_request.base.sha }}
           head: ${{ github.event.pull_request.head.sha }}
-      
